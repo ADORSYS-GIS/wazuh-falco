@@ -19,6 +19,8 @@ NORMAL='\033[0m'
 FALCO_YAML_URL="https://raw.githubusercontent.com/ADORSYS-GIS/wazuh-falco/refs/heads/feat/install-config/config/falco.yaml"
 UNAME=$(uname -s)
 if [ "$UNAME" = "Darwin" ]; then
+    LOGGED_IN_USER=$(scutil <<< "show State:/Users/ConsoleUser" | awk '/Name :/ && ! /loginwindow/ {print $3}')
+
     if [[ $(uname -m) == 'arm64' ]]; then
         FALCO_CONFIG_DIR="/opt/homebrew/etc/falco"
     else
@@ -88,6 +90,11 @@ error_exit() {
     exit 1
 }
 
+#Get the logged-in user on macOS
+brew_command() {
+    sudo -u "$LOGGED_IN_USER" -i brew "$@"
+}
+
 # Detect OS and Install
 if [ -f /etc/debian_version ]; then
     print_step_header "1" "Detecting OS"
@@ -139,7 +146,7 @@ elif [ "$UNAME" = "Darwin" ]; then
         error_exit "Homebrew is not installed. Please install it first: https://brew.sh/"
     fi
 
-    if ! brew install falco; then
+    if ! brew_command install falco; then
         error_exit "Failed to install Falco using Homebrew"
     fi
 else
