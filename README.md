@@ -4,6 +4,8 @@ This project provides scripts to install and uninstall Falco on various Linux di
 
 ## Installation
 
+The installation script installs Falco, downloads the custom configuration, and ensures Falco logs events to `/var/log/falco_events.json`.
+
 To install Falco, run the following command:
 
 ```bash
