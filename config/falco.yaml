@@ -1,0 +1,13 @@
+#Enable logs in json format
+json_output: true
+
+#Adds extra information to the logs. This will serve as a base to trigger alerts on Wazuh
+append_output:
+  - extra_fields:
+      - wazuh_integration: "falco"
+
+#Save the logs to /var/log/falco_events.json file
+file_output:
+  enabled: true
+  keep_alive: false
+  filename: /var/log/falco_events.json
